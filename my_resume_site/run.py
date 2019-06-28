@@ -86,6 +86,12 @@ class post_api(Resource):
                            'rank': s['rank'], 'update_time': s['crawled_time'], 'type': s['type']})
         print(time.clock() - st)
         return jsonify({'result': output})
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html')
+@app.errorhandler(500)
+def not_found(error):
+    return render_template('404.html')
 api.add_resource(post_api, '/post_api/<string:id>')
 # id必须使用不带有/的符号，传参数使用<string:id>
 api.add_resource(get_api, '/hot_research_api/<string:id>')
@@ -93,8 +99,12 @@ api.add_resource(get_api, '/hot_research_api/<string:id>')
 api.add_resource(Sentiment_analysis, '/sa_api/<string:comment>')
 # http://127.0.0.1:5000/hot_research_api/330354375
 # http://127.0.0.1:5000/post_api/330354375
-# http://127.0.0.1:5000/sa_api/这家酒店真差劲
+# http://127.0.0.1:5000/sa_api/有家的感觉
+# 关键字api，主要显示当前zhihu的热点信息
+
+
+# 时序信息api,显示某一个热点事件的整体热度表现，以及对其进行预测和显示
 if __name__ == '__main__':
     # 使用ipconfig进行调试，http://172.20.10.7:5000/hot_research_api/330354375
-    app.run(host='0.0.0.0')
-    # app.run()
+    # app.run(host='0.0.0.0')
+    app.run()
