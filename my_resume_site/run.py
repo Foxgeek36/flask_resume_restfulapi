@@ -58,9 +58,16 @@ class Sentiment_analysis(Resource):
         import time
         s=time.clock()
         sa=SnowNLP(comment).sentiments
-        output = {'comment':comment, 'sa':sa}
-        print(time.clock()-s)
-        return jsonify({'result': output})
+        sa_list = ['消极','积极','中性']
+        if sa>0.5:
+            output = {'comment':comment, 'sa':sa, 'class':sa_list[1]}
+            return jsonify({'result': output})
+        elif sa<0.5:
+            output = {'comment': comment, 'sa': sa, 'class': sa_list[0]}
+            return jsonify({'result': output})
+        else:
+            output = {'comment': comment, 'sa': sa, 'class': sa_list[2]}
+            return jsonify({'result': output})
 
 class post_api(Resource):
     def get(self,id):
@@ -106,5 +113,5 @@ api.add_resource(Sentiment_analysis, '/sa_api/<string:comment>')
 # 时序信息api,显示某一个热点事件的整体热度表现，以及对其进行预测和显示
 if __name__ == '__main__':
     # 使用ipconfig进行调试，http://172.20.10.7:5000/hot_research_api/330354375
-    # app.run(host='0.0.0.0')
-    app.run()
+    app.run(host='0.0.0.0')
+    # app.run()
